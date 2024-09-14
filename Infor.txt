@@ -1,9 +1,12 @@
-10- CC ( v - 2 ; m - 1)
-20 - BTL (Nên Làm bằng Desktop App, bởi làm bằng web thì sinh viên dễ nhầm giữa web với web socket)
-20 - TBKT ( code và submit lên server riêng tương tự như code ptit) 
+ThS. Nguyễn Hoàng Anh
+Mail 
+10- CC    ( vắng - 2 ; muộn - 1)
+20 - BTL  (Nên Làm bằng Desktop App Java Swing , bởi làm bằng web thì sinh viên dễ nhầm giữa web với web socket)
+20 - TBKT ( code và submit lên server riêng tương tự như code PTIT ) 
 
 50 - Tương tự như KT
 
 Yêu cầu: 
-- IDE: Netbean( Java Swing) 
-- DBMS: MySQL -> Workbean, Xampp
+- IDE: Netbean ( Java Swing) 
+- DBMS: MySQL -> Workbean , Xampp.
+
