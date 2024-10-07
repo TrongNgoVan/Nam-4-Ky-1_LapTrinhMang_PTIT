@@ -1,171 +1,212 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TH_UDP;
+package UDP.Total;
 
 /**
  *
  * @author MEDIAMART PHU SON
  */
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.*;
+import java.net.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
+    private DatagramSocket socket;
+    private Connection conn;
+    private static final int BUFFER_SIZE = 65507; // Kích thước tối đa của gói tin UDP
 
-    private static Connection conn = null;
-
-    public static void main(String[] args) {
-        DatagramSocket serverSocket = null;
-
+    public Server(int port) {
         try {
-            // Kết nối đến CSDL MySQL
-            connectDB();  // Kết nối cơ sở dữ liệu
+            // Khởi động server
+            socket = new DatagramSocket(port);
+            System.out.println("Server đã khởi động tại cổng " + port);
 
-            // Tạo socket UDP
-            serverSocket = new DatagramSocket(8889);
-            byte[] receiveData = new byte[1024];
+            // Kết nối cơ sở dữ liệu
+            connectDB();
+            System.out.println("Đã kết nối với cơ sở dữ liệu MySQL.");
 
-            while (true) {
-                System.out.println("Server đang lắng nghe...");
+            // Lắng nghe yêu cầu từ client
+            listenForRequests();
 
-                // Nhận gói tin từ Client
-                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                serverSocket.receive(receivePacket);
-                String clientMessage = new String(receivePacket.getData()).trim();
-
-                // Phân tích yêu cầu từ Client
-                String[] requestParts = clientMessage.split(";");
-                String command = requestParts[0];
-                String response = "";
-
-                switch (command) {
-                    case "SEARCH_BY_NAME":
-                        String name = requestParts[1];
-                        response = searchByName(conn, name);
-                        break;
-                    case "SEARCH_BY_GPA_RANGE":
-                        float minGPA = Float.parseFloat(requestParts[1]);
-                        float maxGPA = Float.parseFloat(requestParts[2]);
-                        response = searchByGpaRange(conn, minGPA, maxGPA);
-                        break;
-                    case "UPDATE_STUDENT":
-                        // Cập nhật toàn bộ thông tin trừ `idSV`
-                        int idSV = Integer.parseInt(requestParts[1]);
-                        String newMaSV = requestParts[2];
-                        String newHoTen = requestParts[3];
-                        int newNamSinh = Integer.parseInt(requestParts[4]);
-                        String newQueQuan = requestParts[5];
-                        float newGPA = Float.parseFloat(requestParts[6]);
-                        response = updateStudent(conn, idSV, newMaSV, newHoTen, newNamSinh, newQueQuan, newGPA);
-                        break;
-                    default:
-                        response = "Lệnh không hợp lệ.";
-                        break;
-                }
-
-                // Gửi phản hồi về Client
-                InetAddress clientAddress = receivePacket.getAddress();
-                int clientPort = receivePacket.getPort();
-                byte[] sendData = response.getBytes();
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientAddress, clientPort);
-                serverSocket.send(sendPacket);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close();
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        } catch (IOException e) {
+            System.err.println("Lỗi khi khởi động server: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi kết nối cơ sở dữ liệu: " + e.getMessage());
         }
     }
 
     // Kết nối tới cơ sở dữ liệu
-    private static void connectDB() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/studentdb?useUnicode=true&characterEncoding=utf8";
+    private void connectDB() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/studentdb";
         String user = "root";
         String password = "";  // Mật khẩu MySQL (nếu có)
         conn = DriverManager.getConnection(url, user, password);
-        System.out.println("Kết nối thành công tới CSDL!");
     }
 
-    // Tìm kiếm sinh viên theo họ tên
-    public static String searchByName(Connection conn, String name) {
-        StringBuilder result = new StringBuilder();
-        try {
-            // SQL để tìm kiếm không phân biệt hoa thường
-            String sql = "SELECT * FROM student WHERE LOWER(hoTen) LIKE LOWER(?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, "%" + name + "%"); // Tìm kiếm theo chuỗi nhập vào
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                result.append("ID: ").append(rs.getInt("idSV")).append(", Name: ").append(rs.getString("hoTen"))
-                      .append(", gPA: ").append(rs.getFloat("gPA")).append("\n");
+    // Lắng nghe và xử lý yêu cầu
+    private void listenForRequests() {
+        while (true) {
+            try {
+                byte[] receiveData = new byte[BUFFER_SIZE];
+                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                socket.receive(receivePacket);
+                
+                System.out.println("Đã nhận yêu cầu từ client.");
+                handleRequest(receivePacket);
+            } catch (IOException e) {
+                System.err.println("Lỗi khi nhận yêu cầu: " + e.getMessage());
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
         }
-        return result.toString().isEmpty() ? "Không tìm thấy sinh viên nào." : result.toString();
     }
 
-    // Tìm kiếm sinh viên theo khoảng gPA
-    public static String searchByGpaRange(Connection conn, float minGPA, float maxGPA) {
-        StringBuilder result = new StringBuilder();
-        try {
-            String sql = "SELECT * FROM student WHERE gPA BETWEEN ? AND ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setFloat(1, minGPA);
-            pstmt.setFloat(2, maxGPA);
-            ResultSet rs = pstmt.executeQuery();
+    // Xử lý yêu cầu từ client
+    private void handleRequest(DatagramPacket receivePacket) {
+        new Thread(() -> {
+            try {
+                String request = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                String[] parts = request.split(",");
+                String requestType = parts[0];
 
-            while (rs.next()) {
-                result.append("ID: ").append(rs.getInt("idSV")).append(", Name: ").append(rs.getString("hoTen"))
-                      .append(", gPA: ").append(rs.getFloat("gPA")).append("\n");
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                PrintWriter out = new PrintWriter(outputStream, true);
+
+                switch (requestType) {
+                    case "searchByName":
+                        String hoTen = parts[1];
+                        List<Student> studentsByName = searchByName(hoTen);
+                        for (Student student : studentsByName) {
+                            out.println(student);
+                        }
+                        out.println("END");
+                        break;
+
+                    case "searchByGPA":
+                        float minGPA = Float.parseFloat(parts[1]);
+                        float maxGPA = Float.parseFloat(parts[2]);
+                        List<Student> studentsByGPA = searchByGPA(minGPA, maxGPA);
+                        for (Student student : studentsByGPA) {
+                            out.println(student);
+                        }
+                        out.println("END");
+                        break;
+
+                    case "update":
+                        int idSV = Integer.parseInt(parts[1]);
+                        String maSV = parts[2];
+                        String ten = parts[3];
+                        int namSinh = Integer.parseInt(parts[4]);
+                        String queQuan = parts[5];
+                        float gPA = Float.parseFloat(parts[6]);
+                        String result = updateStudent(idSV, maSV, ten, namSinh, queQuan, gPA);
+                        out.println(result);
+                        break;
+
+                    default:
+                        out.println("Yêu cầu không hợp lệ.");
+                        break;
+                }
+
+                byte[] sendData = outputStream.toByteArray();
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, 
+                    receivePacket.getAddress(), receivePacket.getPort());
+                socket.send(sendPacket);
+
+            } catch (IOException | SQLException e) {
+                System.err.println("Lỗi xử lý yêu cầu: " + e.getMessage());
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
-        }
-        return result.toString().isEmpty() ? "Không tìm thấy sinh viên nào." : result.toString();
+        }).start();
     }
 
-    // Cập nhật toàn bộ thông tin sinh viên (trừ `idSV`)
-    public static String updateStudent(Connection conn, int idSV, String maSV, String hoTen, int namSinh, String queQuan, float gPA) {
-        try {
-            String sql = "UPDATE student SET maSV = ?, hoTen = ?, namSinh = ?, queQuan = ?, gPA = ? WHERE idSV = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, maSV);
-            pstmt.setString(2, hoTen);
-            pstmt.setInt(3, namSinh);
-            pstmt.setString(4, queQuan);
-            pstmt.setFloat(5, gPA);
-            pstmt.setInt(6, idSV);
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
+    private String updateStudent(int idSV, String maSV, String hoTen, int namSinh, String queQuan, float gPA) throws SQLException {
+        String query = "UPDATE Student SET maSV = ?, hoTen = ?, namSinh = ?, queQuan = ?, gPA = ? WHERE idSV = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, maSV);
+            stmt.setString(2, hoTen);
+            stmt.setInt(3, namSinh);
+            stmt.setString(4, queQuan);
+            stmt.setFloat(5, gPA);
+            stmt.setInt(6, idSV);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
                 return "Cập nhật thành công!";
             } else {
-                return "Không tìm thấy sinh viên với ID: " + idSV;
+                return "Không tìm thấy sinh viên!";
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
         }
+    }
+
+    private List<Student> searchByName(String hoTen) throws SQLException {
+        List<Student> students = new ArrayList<>();
+        String query = "SELECT * FROM Student WHERE hoTen LIKE ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, "%" + hoTen + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    students.add(createStudentFromResultSet(rs));
+                }
+            }
+        }
+        return students;
+    }
+
+    private List<Student> searchByGPA(float minGPA, float maxGPA) throws SQLException {
+        List<Student> students = new ArrayList<>();
+        String query = "SELECT * FROM Student WHERE gPA BETWEEN ? AND ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setFloat(1, minGPA);
+            stmt.setFloat(2, maxGPA);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    students.add(createStudentFromResultSet(rs));
+                }
+            }
+        }
+        return students;
+    }
+
+    private Student createStudentFromResultSet(ResultSet rs) throws SQLException {
+        Student student = new Student();
+        student.setIdSV(rs.getInt("idSV"));
+        student.setMaSV(rs.getString("maSV"));
+        student.setHoTen(rs.getString("hoTen"));
+        student.setNamSinh(rs.getInt("namSinh"));
+        student.setQueQuan(rs.getString("queQuan"));
+        student.setGPA(rs.getFloat("gPA"));
+        return student;
+    }
+
+    // Lớp Student nội bộ
+    private static class Student {
+        private int idSV;
+        private String maSV;
+        private String hoTen;
+        private int namSinh;
+        private String queQuan;
+        private float gPA;
+
+        // Getters and setters
+        public void setIdSV(int idSV) { this.idSV = idSV; }
+        public void setMaSV(String maSV) { this.maSV = maSV; }
+        public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+        public void setNamSinh(int namSinh) { this.namSinh = namSinh; }
+        public void setQueQuan(String queQuan) { this.queQuan = queQuan; }
+        public void setGPA(float gPA) { this.gPA = gPA; }
+
+      @Override
+        public String toString() {
+            return idSV + "," + maSV + "," + hoTen + "," + namSinh + "," + queQuan + "," + gPA;
+        }
+
+
+    }
+
+    public static void main(String[] args) {
+        new Server(8889);
     }
 }
