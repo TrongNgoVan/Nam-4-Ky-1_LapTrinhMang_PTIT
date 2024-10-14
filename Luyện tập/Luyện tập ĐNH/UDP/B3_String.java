@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UDP;
 
 import java.io.ByteArrayInputStream;
@@ -12,17 +8,17 @@ import java.net.InetAddress;
 
 /**
  *
- * @author MEDIAMART PHU SON
+ * @author Ngọ Văn Trọng
  */
 public class B3_String {
     public static void main(String[] args){
         DatagramSocket socket = null;
         
         try{
-            InetAddress serverh =  InetAddress.getByName("localhost");
+            InetAddress serverh =  InetAddress.getByName("203.162.10.109");
             int serverp= 2208;
-            String msv = "B21DCCN319";
-            String code = "oC4JH4si";
+            String msv = "B21DCCN726";
+            String code = "5QJpQ0bE";
             String gui = ";" + msv + ";" +code  ;
             
             byte[] bytegui = gui.getBytes();

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UDP;
 
 import java.net.DatagramPacket;
@@ -12,17 +8,17 @@ import java.util.Arrays;
 
 /**
  *
- * @author MEDIAMART PHU SON
+ * @author Ngọ Văn Trọng
  */
 public class B4_DataType {
     public static void main(String[] args){
         DatagramSocket socket = null;
         try{
-           InetAddress svh = InetAddress.getByName("localhost");
+           InetAddress svh = InetAddress.getByName("203.162.10.109");
            int svp = 2207;
            
-           String msv = "B21DCCN319";
-           String code = "Aisji6xy";
+           String msv = "B21DCCN726";
+           String code = "RGPzy9vA";
            
            String mess = ";" + msv + ";" + code;
            

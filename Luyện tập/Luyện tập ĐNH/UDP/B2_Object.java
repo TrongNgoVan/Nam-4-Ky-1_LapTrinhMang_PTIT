@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UDP;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,65 +11,13 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import java.io.Serializable;
 
 /**
  *
- * @author MEDIAMART PHU SON
+ * @author Ngọ Văn Trọng
  */
-class Product implements Serializable{
-    
-    private static final long serialVersionUID = 20161107; 
-    private String id;
-    private String code;
-    private String name;
-    private int quantity;
-    
-    public Product(){}
-    
-    public Product(String id, String code, String name, int quantity){
-       this.id = id;
-       this.code = code;
-       this.name = name;
-       this.quantity = quantity;
-    }
-    
-    public String getId(){
-        return id;
-    }
-    
-    public String getCode(){
-        return code;
-    }
-    public String getName(){
-    
-     return name;
-    }
-    
-    public void setName(String Name){
-       name = Name;
-    }
-    
-    
-    public int getQuantity(){
-        return quantity;
-    }
-    
-    public void setQuantity(int SL){
-       quantity = SL;
-    }
-//     ghi đè 1 lớp để in dữ liệu 
-    
-     @Override
-    public String toString() {
-        return "Product{id='" + id + "', code='" + code + "', name='" + name + "', quantity=" + quantity + "}";
-    }
-}
 
-/**
- *
- * @author MEDIAMART PHU SON
- */
+
 public class B2_Object {
         
         
@@ -84,12 +28,12 @@ public class B2_Object {
                 
             socket = new DatagramSocket();
 //            Địa chỉ port được đưa về dạng InetAddress;
-            InetAddress serverHost = InetAddress.getByName("localhost");
+            InetAddress serverHost = InetAddress.getByName("203.162.10.109");
             
             int serverPort = 2209;
 //            địa chỉ port
-            String msv = "B21DCCN319";
-            String code = "tjedvqT8";
+            String msv = "B21DCCN726";
+            String code = "nzfVnw0G";
             String mess = ";" + msv +";" + code;
 //           tạo một mess 
            byte[] sendData = mess.getBytes();

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package UDP;
 import java.io.*;
 import java.net.DatagramPacket;
@@ -15,7 +11,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author MEDIAMART PHU SON
+ * @author Ngọ Văn Trọng
  */
 public class B1_DataType {
     
@@ -23,51 +19,51 @@ public class B1_DataType {
         DatagramSocket socket = null;
 
         try {
-            // 1. Tạo socket UDP
+            
             socket = new DatagramSocket();
-            InetAddress serverAddress = InetAddress.getByName("localhost");
-            int serverPort = 2207;
+            InetAddress svh = InetAddress.getByName("203.162.10.109");
+            int svp = 2207;
 
-            // 2. Gửi thông điệp đầu tiên với định dạng ";studentCode;qCode"
-            String studentCode = "B21DCCN319";  // Mã sinh viên của bạn
-            String qCode = "Bca0Dehp";          // Mã câu hỏi
-            String message = ";" + studentCode + ";" + qCode;
+          
+            String msv = "B21DCCN726";  
+            String mb = "Nvad8CYa";          
+            String mess = ";" + msv + ";" + mb;
 //            Tất cả đều quy về gửi byte Data hết
-            byte[] sendData = message.getBytes();
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddress, serverPort);
-            socket.send(sendPacket);
+            byte[] guidata = mess.getBytes();
+            DatagramPacket guigoi = new DatagramPacket(guidata, guidata.length, svh, svp);
+            socket.send(guigoi);
 
-            // 3. Nhận thông điệp từ server
-            byte[] receiveData = new byte[1024];
-            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-            socket.receive(receivePacket);
+            // Nhận thông điệp từ server
+            byte[] nhandata = new byte[1024];
+            DatagramPacket nhangoi = new DatagramPacket(nhandata, nhandata.length);
+            socket.receive(nhangoi);
 
-            String response = new String(receivePacket.getData(), 0, receivePacket.getLength());
-            System.out.println("Received from server: " + response);
+            String response = new String(nhangoi.getData(), 0, nhangoi.getLength());
+            System.out.println("Nhan duoc tu server: " + response);
 
-            // 4. Phân tích thông điệp nhận được
-            String[] parts = response.split(";");
-            String requestId = parts[0];  // requestId
-            String[] numbersStr = parts[1].split(",");  // Chuỗi các số a1, a2, ..., a50
+            // ở bước này là phân tách chuỗi thông điệp nhận 
+            String[] thongdiep = response.split(";");
+            String id = thongdiep[0];  // requestId
+            String[] chuoiso = thongdiep[1].split(",");  // Chuỗi các số a1, a2, ..., a50
 
-            // 5. Chuyển đổi chuỗi các số thành mảng số nguyên
-            int[] numbers = Arrays.stream(numbersStr)
+            // sau đó ta xử lý
+            int[] mangso = Arrays.stream(chuoiso)
                                   .mapToInt(Integer::parseInt)
                                   .toArray();
 
-            // 6. Tìm giá trị lớn nhất và nhỏ nhất
-            int max = Arrays.stream(numbers).max().getAsInt();
-            int min = Arrays.stream(numbers).min().getAsInt();
+           
+            int max = Arrays.stream(mangso).max().getAsInt();
+            int min = Arrays.stream(mangso).min().getAsInt();
 
             System.out.println("Max: " + max + ", Min: " + min);
 
-            // 7. Gửi thông điệp lại lên server với định dạng "requestId;max,min"
-            String resultMessage = requestId + ";" + max + "," + min;
-            byte[] resultData = resultMessage.getBytes();
-            DatagramPacket resultPacket = new DatagramPacket(resultData, resultData.length, serverAddress, serverPort);
+// gửi lại thông điệp thôi
+            String messgui = id + ";" + max + "," + min;
+            byte[] datagui = messgui.getBytes();
+            DatagramPacket resultPacket = new DatagramPacket(datagui, datagui.length, svh, svp);
             socket.send(resultPacket);
 
-            // 8. Đóng socket và kết thúc chương trình
+            // Nhớ đóng kết nối
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
