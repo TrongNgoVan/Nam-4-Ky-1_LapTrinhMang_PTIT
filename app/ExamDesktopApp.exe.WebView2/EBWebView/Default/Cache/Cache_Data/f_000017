@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>hungdn@ptit.edu.vn</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link href="/Source/webcms/styles/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/Script/jquery-1.9.1.js"></script> 
+<script type="text/javascript" src="/Script/libs_webcms.js"></script>
+<script type="text/javascript">
+    $().ready(function () {
+        loadDefault();
+    });
+</script>
+
+
+    <script type="text/javascript">
+        $().ready(function () {
+            ActionForm('/Webcms/Exam');
+            SearchForm();
+            ImportExamUser();
+            $('#txtKey').val(readCookie("cookieFileValue"));
+
+            if (window.chrome.webview) {
+                $('#btnUpload').attr("disabled", true);
+            }
+
+            $('#btnSetTime').on('click', function () {
+
+                var data = [];
+
+                data.push(document.getElementById("txtcmd").value);
+
+                $.ajax({
+                    url: "/Webcms/Exam/setExamTime",
+                    type: "POST",
+                    data: { _data: data },
+                    dataType: "html",
+                    traditional: true,
+                    success: function (response, textStatus, jqXHR) {
+                        alert("Thiết lập thành công ");
+                        window.location.href = '/Webcms/Exam';
+                }
+            });
+        });
+
+        });
+
+
+
+
+    function openForm(qCode) {
+        $('#fromEdit').attr('method', "POST");
+        $('#fromEdit').attr("action", "/Webcms/Exam/Index?action=edit&qCode=" + qCode); //+ "&ExamId=" + $("#slSearchGroup").val());
+        $('#fromEdit').submit();
+    };
+
+    console.log(window.chrome.webview);  // Ensure this is not undefined
+
+    function handleUpload() {
+        // Trigger the hidden file input when the user clicks the "Nộp bài" button
+        if (window.chrome && window.chrome.webview) {
+                // Get the form element
+                var form = document.getElementById('uploadForm');
+                var uploadUrl = form.action;
+                // Collect all form data into an object
+                var formData = new FormData(form);
+
+                // Convert the FormData to JSON (excluding the file)
+                var formObject = {};
+                formData.forEach(function (value, key) {
+                    if (key !== 'files') {
+                        formObject[key] = value;
+                    }
+                });
+                // Send the form data (without the file) to WebView2
+                window.chrome.webview.postMessage({
+                    type: 'fileUpload',
+                    url: uploadUrl,
+                    formData: formObject
+                });
+        }
+        else
+            document.getElementById('files').click();
+    }
+
+    function handleFileSelection() {
+        var selectedFile = document.getElementById('files').files[0];
+        if (selectedFile) {
+            
+            var fileInfo = "File Name: " + selectedFile.name + " | Size: " + selectedFile.size + " bytes";
+            document.getElementById('txtFileInfo').value = fileInfo;
+            // Automatically submit the form after file is selected
+            browserUpload(selectedFile);
+        }
+    }
+
+    function handleFileSelection() {
+        var fileInput = document.getElementById('files');
+        var file = fileInput.files[0];
+
+        if (file) {
+            var fileInfo = "File Name: " + file.name + " | Size: " + file.size + " bytes";
+            document.getElementById('uploadStatus').textContent = fileInfo;
+            document.getElementById('uploadForm').submit(); // Submit the form after file is selected
+        }
+    }
+
+
+    
+    </script>
+
+
+
+</head>
+
+<body>
+<div class="wrapper">
+	<div class="toolbar">
+    	<div class="left">
+             
+            <span>Xin chào, </span><a href="#">test</a>    | <a href="#"> ::1 </a>  | | <a href="#"> 3 </a>  |  <span> <a href="/Webcms/Login/Logout">Thoát</a></span>
+        </div>
+        <div class="right">
+        	
+            <a id="onTop" href="#"><img src="/Source/webcms/images/top.png" /></a>  
+        </div>
+        <div class="cl"></div>
+    </div>
+    <!-- End toolbar -->
+    <div class="logo">
+        <div class="datetime">
+        	<span id="datetime"></span>
+        </div>
+        <div class="cl"></div>
+    </div>
+    <!-- Emd logo -->
+    <div class="main">
+    	<div class="box-left">
+        	<div class="menu">
+            	<h3>Nghiệp vụ</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Hỏi đ&#225;p</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>B&#225;o c&#225;o</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Danh mục</h3>
+                <ul>
+                	<li><a href="/Webcms/ExamShiftLog">Log xử l&#253;</a></li>
+                	<li><a href="/Webcms/Exam">B&#224;i thi</a></li>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Ph&#226;n quyền</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Hệ thống</h3>
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <!-- Emd left -->
+        
+    <div class="full"></div>
+    <div class="panel upload">
+        <iframe class="iframe" name="fUpload" id="fUpload"></iframe>
+    </div>
+    <div class="box-content">
+        <div class="content-left f">
+            <div class="title">
+                <a href="/Webcms/Exam">
+                    <img src="/Source/webcms/images/home.png"/></a>
+                <span>Bài thi  </span>
+                <button type="button" onclick="history.back(-1);">Quay lại</button>
+
+                <label id="timecountdown" style="color: green; font-weight: bold; float: right"></label>
+
+            </div>
+            <!-- End title -->
+            <div class="search">
+                <form id="frmSearch">
+
+                    <label>Từ khóa </label>
+                    <input type="text" style="width:300px;" id="txtKey" name="txtKey" value=""/>
+
+                    
+
+                </form>
+            </div>
+
+            <!-- End search -->
+            <div class="page">
+                <div class="page-list" style="text-align: start; padding-bottom: 10px">
+
+                </div>
+            </div>
+
+            <form id="fromEdit">
+                <div class="table-list">
+                    <table>
+                        <thead>
+                            <th>STT</th>
+
+                            <th>Tiêu đề</th>
+
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+
+                        </thead>
+                        <tbody>
+
+
+
+
+                                <tr class="status1" >
+                                    <td>1</td>
+
+                                    <td>nRUk3Jc1 - UDP - Data Type</td>
+
+                                    <td>Đ&#227; nộp b&#224;i</td>
+                                    <td>
+                                        <button id="87ca798f-3cf5-4889-ab13-ec4740c6d88abtnShow" value ="87ca798f-3cf5-4889-ab13-ec4740c6d88a" class="btn btn-primary" type=button onclick ="openForm('nRUk3Jc1');" >Chi tiết</button>
+                                    </td>
+                                </tr>
+                        </tbody>
+                            <tr>
+                                <th>
+                                    <label>Nội dung</label></th>
+                                <td colspan="5">
+                                    <textarea style="width: 98%" id="txtqContent" rows="10" name="txtqContent">[Mã câu hỏi (qCode): nRUk3Jc1].  Một chương tr&#236;nh server cho ph&#233;p giao tiếp qua giao thức UDP tại cổng 807. Y&#234;u cầu l&#224; x&#226;y dựng một chương tr&#236;nh client trao đổi th&#244;ng tin với server theo kịch bản:
+a.	Gửi th&#244;ng điệp l&#224; một chuỗi chứa m&#227; sinh vi&#234;n v&#224; m&#227; c&#226;u hỏi theo định dạng “;studentCode;qCode”. V&#237; dụ: “;B15DCCN001;73457A17”
+b.	Nhận th&#244;ng điệp l&#224; một chuỗi từ server theo định dạng “requestId;n;A1,A2,...An” , với
+-	requestId l&#224; chuỗi ngẫu nhi&#234;n duy nhất
+-	n l&#224; một số ngẫu nhi&#234;n nhỏ hơn 100.
+-            A1, A2 ... Am (m &lt;= n) l&#224; c&#225;c gi&#225; trị ngẫu nhi&#234;n nhỏ hơn hoặc bằng n v&#224; c&#243; thể tr&#249;ng nhau.
+Ex: requestId;10;2,3,5,6,5
+c.	T&#236;m kiếm c&#225;c gi&#225; trị c&#242;n thiếu v&#224; gửi l&#234;n server theo định dạng “requestId;B1,B2,...,Bm”
+Ex: requestId;1,4,7,8,9,10
+d.	Đ&#243;ng socket v&#224; kết th&#250;c chương tr&#236;nh.</textarea></td>
+                            </tr>
+                    </table>
+                    <input type="hidden" name="qId" id="qId" />
+                </div>
+
+                <div>
+                    <input type="hidden" name="action" value="edit" />
+                    <input type="hidden" name="count" value="1" />
+                    <input type="hidden" name="ResultStatus" id="ResultStatus" />
+                    <input type="hidden" name="returnUrl" id="returnUrl" value="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac" />
+                </div>
+
+            </form>
+
+            <div style="margin: 20px"></div>
+
+                <div class="search">
+                    <form id="uploadForm" action="/Webcms/Exam/Upload" method="post" enctype="multipart/form-data">
+                        <!-- Hidden file input for selecting the file -->
+                        <input type="file" id="files" name="files" style="display: none;" accept=".cpp,.c,.java,.txt,.rar,.zip,.vpp" onchange="handleFileSelection();">
+
+                        <!-- Button to trigger file input -->
+                        <button type="button" id="selectFileBtn" onclick="handleUpload()">Nộp bài (mã nguồn)</button>
+                        <p id="uploadStatus" style="margin:auto"></p>
+
+                        <!-- Hidden inputs for additional form data -->
+                        <input id="txtqCode" type="hidden" name="txtqCode" value="802"/>
+                        <input id="txtquestion_alias" type="hidden" name="txtquestion_alias" value="nRUk3Jc1"/>
+                        <input id="txtExamId" type="hidden" name="txtExamId" value="5b0dda68-a576-4105-800c-32a80f3deeac"/>
+                        <input id="txtUserName" type="hidden" name="txtUserName" value="test"/>
+                        <input id="txtFileInfo" type="hidden" name="txtFileInfo" />
+
+                        
+                        <!-- Status of the upload process -->
+                    </form>
+
+
+                </div>
+                <div id="documentBySbd" style="style">
+                    <div class="page">
+                        <div class="action">
+                            <button type="button" id="btnActionDelete">Xóa</button>
+                        </div>
+                        <div class="page-list">
+                        </div>
+                    </div>
+                    <div style="margin: 10px"></div>
+                    <form id="frmList">
+                        <div class="table-list">
+                            <table>
+                                <thead>
+                                    <th>#</th>
+                                    <th style="width: 30px;">
+                                        <input type="checkbox" value="ckID" id="ckCheckAll" /></th>
+                                    <th><a class="" href="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac&amp;OrderBy=Name&amp;Order=asc">Tên File</a></th>
+
+                                    <th><a class="" href="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac&amp;OrderBy=Size&amp;Order=asc">Size</a></th>
+                                    <th><a class="" href="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac&amp;OrderBy=UserName&amp;Order=asc">User</a></th>
+                                    <th>Trạng thái</th>
+                                    <th>Thực hiện</th>
+                                </thead>
+                                <tbody>
+
+                                        <tr>
+                                            <td>
+                                                1
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" title="ckID" name="ckID-1" value="17b979a1-92f0-4e51-bbda-e4f698a78f65" />
+                                            </td>
+                                            <td align="left">
+                                                <span>
+                                                    testnRUk3Jc1
+                                                    <br />
+                                                    <input type="hidden" name="FileID-1" value="17b979a1-92f0-4e51-bbda-e4f698a78f65" />
+                                                    <input type="hidden" name="examSrc-1" value="Exam12102024\testnruk3jc1.txt" />
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+                                                598 bytes
+                                            </td>
+                                            <td>
+                                                test
+                                            </td>
+                                            <td>
+                                                    <label style="font-weight:bold" name="slStatus-1" >Chưa chấm</label>
+
+                                                
+                                            </td>
+                                            <td>
+
+                                                PASS:  / 3
+                                            <br />
+
+                                            </td>
+                                        </tr>
+                                </tbody>
+                                <tfoot>
+                                    <th>#</th>
+                                    <th style="width: 30px;">
+                                        <input type="checkbox" value="ckID" id="ckCheckAll" /></th>
+                                    <th><a class="" href="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac&amp;OrderBy=Name&amp;Order=asc">Tên File</a></th>
+
+                                    <th><a class="" href="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac&amp;OrderBy=Size&amp;Order=asc">Size</a></th>
+                                    <th><a class="" href="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac&amp;OrderBy=UserName&amp;Order=asc">User</a></th>
+                                    <th>Trạng thái</th>
+                                    <th>Thực hiện</th>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <div class="action" style="text-align: right;">
+                            <input id="Fcount" type="hidden" name="Fcount" value="1"/>
+                            <input id="qCode" type="hidden" name="qCode" value="802"/>
+                            <input id="question_alias" type="hidden" name="question_alias" value="nRUk3Jc1"/>
+                            <input type="hidden" name="returnUrl" value="?action=edit&amp;qCode=nRUk3Jc1&amp;ExamId=5b0dda68-a576-4105-800c-32a80f3deeac" />
+                            <p class="error"></p>
+                        </div>
+                    </form>
+
+                </div>
+        </div>
+    </div>
+    <!-- End content -->
+    <script>
+        var distance = '4145061'; // in seconds
+
+
+        var _second = 1000;
+        var _minute = _second * 60;
+        var _hour = _minute * 60;
+        var _day = _hour * 24;
+        var timer;
+        var _the_end = 0;
+        function showRemaining() {
+
+            distance -= 1000;
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById('timecountdown').innerHTML = 'Hết giờ!';
+                document.getElementById('timecountdown').style.color = "red";
+                if (_the_end = 0) {
+                    window.location.href = 'Exam';
+                    _the_end++;
+                }
+                return;
+            }
+            // alert(distance);
+            var days = Math.floor(distance / _day);
+            var _hours = Math.floor((distance % _day) / _hour);
+            var _minutes = Math.floor((distance % _hour) / _minute);
+            var _seconds = Math.floor((distance % _minute) / _second);
+
+            document.getElementById('timecountdown').innerHTML = ' Hrs: ' + _hours;
+            document.getElementById('timecountdown').innerHTML += ' Mins: ' + _minutes;
+            document.getElementById('timecountdown').innerHTML += ' Secs: ' + _seconds;
+        }
+        timer = setInterval(showRemaining, 1000);
+
+        function validateForm() {
+            var fileInput = document.getElementById("files");
+            var submitButton = document.getElementById("btnUpload");
+            // Check if a file has been selected
+            if (fileInput.files.length === 0) {
+                alert("Vui lòng chọn một tệp trước khi nộp!");
+                return false; // Prevent form submission
+            }
+
+            // Disable the "Nộp bài!" button
+
+            submitButton.disabled = true;
+
+
+            return true; // Allow form submission
+        }
+        
+        
+
+
+    </script>
+
+      <div class="clearfix"></div>
+    </div>
+    <!-- End main -->
+</div> 
+</body>
+</html>

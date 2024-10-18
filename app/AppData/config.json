@@ -1,0 +1,19 @@
+﻿{
+  "version": "1.0.1",
+  "examServerIP": "http://10.170.44.199",
+  "useNetworkManager": true,
+  "useClipboardManager": true,
+  "useBrowserManager": true,
+  "useUSBManager": true,
+  "useHeartBeat": true,
+  "interval": 5000,
+  "managedBrowsers": [
+    "chrome",
+    "firefox",
+    "edge",
+    "opera",
+    "brave"
+  ],
+  "disableTaskManager": false,
+  "heartBeatServerUrl": "http://10.170.44.199/Webcms/Monitoring/Heartbeat"
+}

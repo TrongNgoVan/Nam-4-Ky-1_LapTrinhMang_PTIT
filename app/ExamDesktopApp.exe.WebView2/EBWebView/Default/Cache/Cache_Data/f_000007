@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>hungdn@ptit.edu.vn</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link href="/Source/webcms/styles/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/Script/jquery-1.9.1.js"></script> 
+<script type="text/javascript" src="/Script/libs_webcms.js"></script>
+<script type="text/javascript">
+    $().ready(function () {
+        loadDefault();
+    });
+</script>
+
+
+    <script type="text/javascript">
+        $().ready(function () {
+            ActionForm('/Webcms/ExamShiftLog');
+            SearchForm();
+            ImportExamUser();
+            $('#txtKey').val(readCookie("cookieFileValue"));
+
+            $('#btnSetTime').on('click', function () {
+
+                var data = [];
+
+                data.push(document.getElementById("txtcmd").value);
+
+                $.ajax({
+                    url: "/Webcms/Exam/setExamTime",
+                    type: "POST",
+                    data: { _data: data },
+                    dataType: "html",
+                    traditional: true,
+                    success: function (response, textStatus, jqXHR) {
+                        alert("Thiết lập thành công ");
+                        window.location.href = "Exam";;
+                    }
+                });
+            });
+
+        });
+
+
+
+        function getInfo() {
+            var x = document.getElementById("files");
+            var txt = "";
+            if ('files' in x) {
+                if (x.files.length == 0) {
+                    txt = "Select one or more files.";
+                } else {
+                    for (var i = 0; i < x.files.length; i++) {
+                        //txt += "<br><strong>" + (i + 1) + ". file</strong><br>";
+                        var file = x.files[i];
+                        if ('name' in file) {
+                            txt += "name: " + file.name + " ,";
+                        }
+                        if ('size' in file) {
+                            txt += "size: " + file.size + " bytes, ";
+                        }
+                        if ('lastModifiedDate' in file) {
+                            txt += "lastModifiedDate: " + file.lastModifiedDate.toLocaleString() + ";";
+                        }
+
+
+                    }
+                }
+            }
+            else {
+                if (x.value == "") {
+                    txt += "Select one or more files.";
+                } else {
+                    txt += "The files property is not supported by your browser!";
+                    txt += "<br>The path of the selected file: " + x.value; // If the browser does not support the files property, it will return the path of the selected file instead.
+                }
+            }
+            document.getElementById("txtFileInfo").value = txt;
+            //alert(document.getElementById("txtFileInfo").innerHTML);
+        }
+
+    </script>
+
+
+
+</head>
+
+<body>
+<div class="wrapper">
+	<div class="toolbar">
+    	<div class="left">
+             
+            <span>Xin chào, </span><a href="#">test</a>    | <a href="#"> 116.96.45.81 </a>  | | <a href="#"> 13 </a>  |  <span> <a href="/Webcms/Login/Logout">Thoát</a></span>
+        </div>
+        <div class="right">
+        	
+            <a id="onTop" href="#"><img src="/Source/webcms/images/top.png" /></a>  
+        </div>
+        <div class="cl"></div>
+    </div>
+    <!-- End toolbar -->
+    <div class="logo">
+        <div class="datetime">
+        	<span id="datetime"></span>
+        </div>
+        <div class="cl"></div>
+    </div>
+    <!-- Emd logo -->
+    <div class="main">
+    	<div class="box-left">
+        	<div class="menu">
+            	<h3>Nghiệp vụ</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Hỏi đ&#225;p</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>B&#225;o c&#225;o</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Danh mục</h3>
+                <ul>
+                	<li><a href="/Webcms/ExamShiftLog">Log xử l&#253;</a></li>
+                	<li><a href="/Webcms/Exam">B&#224;i thi</a></li>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Ph&#226;n quyền</h3>
+                <ul>
+                </ul>
+            </div>
+        	<div class="menu">
+            	<h3>Hệ thống</h3>
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <!-- Emd left -->
+        
+    <div class="full"></div>
+    <div class="panel upload">
+        <iframe class="iframe" name="fUpload" id="fUpload"></iframe>
+    </div>
+    <div class="box-content">
+        <div class="content-left f">
+            <div class="title">
+                <a href="/Webcms/websites/Home">
+                    <img src="/Source/webcms/images/home.png"/></a>
+                <span>Nhật ký xử lý</span>
+                <button type="button" onclick="history.back(-1);">Quay lại</button>
+
+            </div>
+            <!-- End title -->
+            <div class="search">
+                <form id="frmSearch">
+
+                </form>
+
+            </div>
+
+            <!-- End search -->
+            <form id="frmList">
+                <div class="list file">
+                                        <div class="page">
+                        <div class="page-list">
+                            <label>Show</label>
+                            <select id="show" title="">
+                                <option title="?show=20&amp;page=1" value="20">20</option>
+                                <option title="?show=60&amp;page=1" value="60">60</option>
+                                <option title="?show=100&amp;page=1" value="100">100</option>
+                            </select>
+                            <label>Trang 1/1</label>
+                            <select id="page" title="">
+                                    <option title="?page=1" value="1">1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- End page -->
+                    <div class="table-list">
+                        <table>
+                            <thead>
+                                <th>#</th>
+                                <th style="width: 40px;">
+                                    <input type="checkbox" value="ckID" id="ckCheckAll" /></th>
+
+                                <th><a class="" href="?OrderBy=Created&amp;Order=asc">Thời gian</a></th>
+                                <th>Mã câu hỏi</th>
+                                <th><a class="" href="?OrderBy=clientInfo&amp;Order=asc">Máy trạm</a></th>
+                                <th><a class="" href="?OrderBy=status&amp;Order=asc">Trạng thái</a></th>
+                                <th>Request Id</th>
+                                <th>Thông tin xử lý</th>
+
+                            </thead>
+                            <tbody>
+
+                                    <tr>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td >
+                                            <input type="checkbox" title="ckID" name="ckID-1" value="230350" />
+                                        </td>
+
+                                        
+
+                                        <td>
+                                            10/8/2024 11:11:08 PM
+                                        </td>
+                                        <td>
+                                            5i8Rpkno
+                                        </td>
+                                        <td>
+                                            /116.96.45.81
+                                        </td>
+                                        <td>
+                                            <select class="change" name="slStatus-1" title="1" disabled>
+                                                <option value="1"> Đúng </option>
+                                                <option value="2"> Sai </option>
+                                                <option value="3"> Ngoại lệ </option>
+                                                <option value="4"> Chưa hoàn thành  </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                           4Z0dCLe9
+
+                                        </td>
+                                        <td style="width:60%">
+                                            <textarea style="width:90%;text-align:left" id="txtqContent" rows="10" name="txtqContent">227213,232039,151245,125320,47845,199684,61712,136824,44183,39612,76814,204528,64593,139927,138357,148152,58192,99180,103787,180654,179358,162583,205628,193383 | 232039,39612 | 232039,39612
+                                                </textarea>
+                                            
+                                            
+
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            2
+                                        </td>
+                                        <td >
+                                            <input type="checkbox" title="ckID" name="ckID-2" value="230348" />
+                                        </td>
+
+                                        
+
+                                        <td>
+                                            10/8/2024 11:10:53 PM
+                                        </td>
+                                        <td>
+                                            5i8Rpkno
+                                        </td>
+                                        <td>
+                                            /116.96.45.81
+                                        </td>
+                                        <td>
+                                            <select class="change" name="slStatus-2" title="1" disabled>
+                                                <option value="1"> Đúng </option>
+                                                <option value="2"> Sai </option>
+                                                <option value="3"> Ngoại lệ </option>
+                                                <option value="4"> Chưa hoàn thành  </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                           i8s26XUH
+
+                                        </td>
+                                        <td style="width:60%">
+                                            <textarea style="width:90%;text-align:left" id="txtqContent" rows="10" name="txtqContent">134396,35149,32857,196454,138441,125423,102962,211065,175193,65768,108748,214707,40178,119360,48745,89805,227564,169927,68085,115306,199927,77718,57084,174813,51305,28447,113385,78296,80899,51814,181548,218464,113326,149161,184326,80876,200279,247963,143556,245788,105941,124926,121398,29047,53811,1982,159051,87708,184958,145179,136939 | 247963,1982 | 247963,1982
+                                                </textarea>
+                                            
+                                            
+
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            3
+                                        </td>
+                                        <td >
+                                            <input type="checkbox" title="ckID" name="ckID-3" value="230347" />
+                                        </td>
+
+                                        
+
+                                        <td>
+                                            10/8/2024 11:10:45 PM
+                                        </td>
+                                        <td>
+                                            5i8Rpkno
+                                        </td>
+                                        <td>
+                                            /116.96.45.81
+                                        </td>
+                                        <td>
+                                            <select class="change" name="slStatus-3" title="1" disabled>
+                                                <option value="1"> Đúng </option>
+                                                <option value="2"> Sai </option>
+                                                <option value="3"> Ngoại lệ </option>
+                                                <option value="4"> Chưa hoàn thành  </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                           SxoxXIuC
+
+                                        </td>
+                                        <td style="width:60%">
+                                            <textarea style="width:90%;text-align:left" id="txtqContent" rows="10" name="txtqContent">63494,32068,116304,173783,40271,39553,150564,105131,56435,28951,216204,111708,148348,165156,204061 | 216204,28951 | 216204,28951
+                                                </textarea>
+                                            
+                                            
+
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            4
+                                        </td>
+                                        <td >
+                                            <input type="checkbox" title="ckID" name="ckID-4" value="230346" />
+                                        </td>
+
+                                        
+
+                                        <td>
+                                            10/8/2024 11:10:26 PM
+                                        </td>
+                                        <td>
+                                            5i8Rpkno
+                                        </td>
+                                        <td>
+                                            /116.96.45.81
+                                        </td>
+                                        <td>
+                                            <select class="change" name="slStatus-4" title="1" disabled>
+                                                <option value="1"> Đúng </option>
+                                                <option value="2"> Sai </option>
+                                                <option value="3"> Ngoại lệ </option>
+                                                <option value="4"> Chưa hoàn thành  </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                           cAETL04o
+
+                                        </td>
+                                        <td style="width:60%">
+                                            <textarea style="width:90%;text-align:left" id="txtqContent" rows="10" name="txtqContent">241020,227388,72068,37196,50914,92244,181236,122813,40150,181152,91181,18305,241732,159704,169915,7174,246567,241780,146223,232063,61876,140615,31691,148496,39837,15817 | 246567,7174 | 246567,7174
+                                                </textarea>
+                                            
+                                            
+
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            5
+                                        </td>
+                                        <td >
+                                            <input type="checkbox" title="ckID" name="ckID-5" value="227670" />
+                                        </td>
+
+                                        
+
+                                        <td>
+                                            10/6/2024 5:31:44 PM
+                                        </td>
+                                        <td>
+                                            Fqp22HJL
+                                        </td>
+                                        <td>
+                                            /116.96.45.81
+                                        </td>
+                                        <td>
+                                            <select class="change" name="slStatus-5" title="1" disabled>
+                                                <option value="1"> Đúng </option>
+                                                <option value="2"> Sai </option>
+                                                <option value="3"> Ngoại lệ </option>
+                                                <option value="4"> Chưa hoàn thành  </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                           dDRSIi39
+
+                                        </td>
+                                        <td style="width:60%">
+                                            <textarea style="width:90%;text-align:left" id="txtqContent" rows="10" name="txtqContent">100665,147130,210830,88856,159973,6130,7300,81177,199355,223974,222052,155348,159656,90622,144997,93062,18342,216023,78051,210069,202358,219152,203288,60722,23238 | 222052,7300 | 222052,7300
+                                                </textarea>
+                                            
+                                            
+
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            6
+                                        </td>
+                                        <td >
+                                            <input type="checkbox" title="ckID" name="ckID-6" value="227669" />
+                                        </td>
+
+                                        
+
+                                        <td>
+                                            10/6/2024 5:23:59 PM
+                                        </td>
+                                        <td>
+                                            Fqp22HJL
+                                        </td>
+                                        <td>
+                                            /116.96.45.81
+                                        </td>
+                                        <td>
+                                            <select class="change" name="slStatus-6" title="1" disabled>
+                                                <option value="1"> Đúng </option>
+                                                <option value="2"> Sai </option>
+                                                <option value="3"> Ngoại lệ </option>
+                                                <option value="4"> Chưa hoàn thành  </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                           9voctywm
+
+                                        </td>
+                                        <td style="width:60%">
+                                            <textarea style="width:90%;text-align:left" id="txtqContent" rows="10" name="txtqContent">207598,96915,62537,144253,23999,122438,115213,120255,23644,113124,163230,249589,206874,211739,96526 | 211739,23999 | 211739,23999
+                                                </textarea>
+                                            
+                                            
+
+                                        </td>
+                                        
+                                    </tr>
+                            </tbody>
+                            <tfoot>
+                                <th>#</th>
+                                <th style="width: 30px;">
+                                    <input type="checkbox" value="ckID" id="ckCheckAll" /></th>
+
+                                <th><a class="" href="?OrderBy=Created&amp;Order=asc">Thời gian</a></th>
+                                <th><a class="" href="?OrderBy=qId&amp;Order=asc">Mã câu hỏi</a></th>
+                                <th><a class="" href="?OrderBy=clientInfo&amp;Order=asc">Máy trạm</a></th>
+                                <th><a class="" href="?OrderBy=status&amp;Order=asc">Trạng thái</a></th>
+                                <th>Request Id</th>
+                                <th>Thông tin xử lý</th>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                    <div class="page">
+                        <div class="action">
+                            <input type="hidden" name="count" value="6" />
+                        </div>
+                        <div class="page-list">
+                            <label>Show</label>
+                            <select id="show" title="">
+                                <option title="?show=20&amp;page=1" value="20">20</option>
+                                <option title="?show=60&amp;page=1" value="60">60</option>
+                                <option title="?show=100&amp;page=1" value="100">100</option>
+                            </select>
+                            <label>Trang 1/1</label>
+                            <select id="page" title="">
+                                    <option title="?page=1" value="1">1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- End page -->
+                </div>
+                <!-- End list -->
+            </form>
+
+
+        </div>
+    </div>
+
+
+      <div class="clearfix"></div>
+    </div>
+    <!-- End main -->
+</div> 
+</body>
+</html>

@@ -1,0 +1,97 @@
+2024-10-13 17:24:42 [EXCEPTION] [Error terminating: ] Cannot process request because the process (11812) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:24:42 [EXCEPTION] [Error terminating: ] Cannot process request because the process (27420) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:24:42 [EXCEPTION] [Error terminating: ] Cannot process request because the process (29072) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (12480) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (6112) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (1888) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (23360) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (8004) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (5804) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (18552) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (5708) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (28568) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (12084) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (1044) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (23076) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (26672) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:08 [EXCEPTION] [Error terminating: ] Cannot process request because the process (6444) has exited.
+   at System.Diagnostics.ProcessManager.OpenProcess(Int32 processId, Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+   at System.Diagnostics.Process.Kill()
+   at ExamDesktopApp.BrowserManager.CheckAndTerminateBrowsers(Object state) in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Manager\BrowserManager.cs:line 47
+2024-10-13 17:25:44 [EXCEPTION] [Heartbeat delay was canceled] A task was canceled.
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ExamDesktopApp.Services.HeartbeatService.<StartHeartbeatAsync>d__3.MoveNext() in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Services\HeartbeatService.cs:line 52
+2024-10-16 15:23:16 [EXCEPTION] [Heartbeat task was canceled.] A task was canceled.
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ExamDesktopApp.Services.HeartbeatService.<StartHeartbeatAsync>d__3.MoveNext() in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Services\HeartbeatService.cs:line 26
+2024-10-16 21:49:30 [EXCEPTION] [Heartbeat task was canceled.] A task was canceled.
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ExamDesktopApp.Services.HeartbeatService.<StartHeartbeatAsync>d__3.MoveNext() in C:\Users\mam\source\repos\ExamDesktopApp\ExamDesktopApp\Services\HeartbeatService.cs:line 26
